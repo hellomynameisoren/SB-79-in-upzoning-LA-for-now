@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsbG9teW5hbWVpc29yZW4iLCJhIjoiY21vbHJudXJyMGYzcDJvb2wxZTk2amFkZyJ9.FuMXR__H3myxnTfGj0_cGg';
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: [-118.25, 34.05],
+    zoom: 9
+  });
+
+  map.on('load', () => {
+
+    // --- Layer 1: Option 1 with updated K Line ---
+    map.addSource('option1-kline-data', {
+      type: 'geojson',
+      data: 'Option 1 with updated K Line.geojson?' + Date.now()
+    });
+
+    map.addLayer({
+      id: 'option1-kline-layer',
+      type: 'fill',
+      source: 'option1-kline-data',
+      paint: {
+        'fill-color': '#3498db',
+        'fill-opacity': 0.25
+      }
+    });
+
+    map.on('click', 'option1-kline-layer', (e) => {
+      const props = e.features[0].properties;
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML('<pre>' + JSON.stringify(props, null, 2) + '</pre>')
+        .addTo(map);
+    });
+
+    map.on('mouseenter', 'option1-kline-layer', () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', 'option1-kline-layer', () => map.getCanvas().style.cursor = '');
+
+    // --- Layer 2: Ineligible in Option 1 no HPOZ or fire ---
+    map.addSource('ineligible-option1-data', {
+      type: 'geojson',
+      data: 'Ineligible in Option 1 no HPOZ or fire.geojson'
+    });
+
+    map.addLayer({
+      id: 'ineligible-option1-layer',
+      type: 'fill',
+      source: 'ineligible-option1-data',
+      paint: {
+        'fill-color': '#e74c3c',
+        'fill-opacity': 0.5
+      }
+    });
+
+    map.addLayer({
+      id: 'ineligible-option1-layer-outline',
+      type: 'line',
+      source: 'ineligible-option1-data',
+      paint: {
+        'line-color': '#c0392b',
+        'line-width': 1
+      }
+    });
+
+    map.on('click', 'ineligible-option1-layer', (e) => {
+      const props = e.features[0].properties;
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML('<pre>' + JSON.stringify(props, null, 2) + '</pre>')
+        .addTo(map);
+    });
+
+    map.on('mouseenter', 'ineligible-option1-layer', () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', 'ineligible-option1-layer', () => map.getCanvas().style.cursor = '');
+
+    // --- Layer 3: Low rise eligible in new K Line ---
+    map.addSource('lowrise-kline-data', {
+      type: 'geojson',
+      data: 'Low rise eligible in new K Line.geojson'
+    });
+
+    map.addLayer({
+      id: 'lowrise-kline-layer',
+      type: 'fill',
+      source: 'lowrise-kline-data',
+      paint: {
+        'fill-color': '#e74c3c',
+        'fill-opacity': 0.5
+      }
+    });
+
+    map.addLayer({
+      id: 'lowrise-kline-layer-outline',
+      type: 'line',
+      source: 'lowrise-kline-data',
+      paint: {
+        'line-color': '#c0392b',
+        'line-width': 1
+      }
+    });
+
+    map.on('click', 'lowrise-kline-layer', (e) => {
+      const props = e.features[0].properties;
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML('<pre>' + JSON.stringify(props, null, 2) + '</pre>')
+        .addTo(map);
+    });
+
+    map.on('mouseenter', 'lowrise-kline-layer', () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', 'lowrise-kline-layer', () => map.getCanvas().style.cursor = '');
+
+  }); // ← end of map.on('load')
+</script>
+</body>
+</html>
