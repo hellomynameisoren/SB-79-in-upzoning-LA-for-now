@@ -25,10 +25,10 @@
 
   map.on('load', () => {
 
-    // --- Layer 1: Option 1 with updated K Line ---
+    // --- Layer 1: Option 1 with updated K Line (blue geography) ---
     map.addSource('option1-kline-data', {
       type: 'geojson',
-      data: 'sb79_tod_buffers_combined.geojson'
+      data: 'Option 1 with updated K Line.geojson?' + Date.now()
     });
 
     map.addLayer({
@@ -55,7 +55,7 @@
     // --- Layer 2: Ineligible in Option 1 no HPOZ or fire ---
     map.addSource('ineligible-option1-data', {
       type: 'geojson',
-      data: 'Ineligible in Option 1 no HPOZ or fire.geojson'
+      data: 'Ineligible in Option 1 no HPOZ or fire.geojson?' + Date.now()
     });
 
     map.addLayer({
@@ -92,7 +92,7 @@
     // --- Layer 3: Low rise eligible in new K Line ---
     map.addSource('lowrise-kline-data', {
       type: 'geojson',
-      data: 'Low rise eligible in new K Line.geojson'
+      data: 'Low rise eligible in new K Line.geojson?' + Date.now()
     });
 
     map.addLayer({
@@ -125,6 +125,53 @@
 
     map.on('mouseenter', 'lowrise-kline-layer', () => map.getCanvas().style.cursor = 'pointer');
     map.on('mouseleave', 'lowrise-kline-layer', () => map.getCanvas().style.cursor = '');
+
+    // --- Tier 2: 1/4-1/2 mile band (orange) — drawn first so red layers paint over it ---
+    map.addSource('tier2-data', {
+      type: 'geojson',
+      data: 'sb79_tod_buffers_tier2_all_clip.geojson?' + Date.now()
+    });
+
+    // Tier 2 half-mile (orange) — base layer
+    map.addLayer({
+      id: 'tier2-half-layer',
+      type: 'fill',
+      source: 'tier2-data',
+      filter: ['==', ['get', 'buffer'], '1/2 mile'],
+      paint: {
+        'fill-color': '#e67e22',
+        'fill-opacity': 0.5
+      }
+    });
+
+    // Tier 2 quarter-mile (red) — paints over orange inner area
+    map.addLayer({
+      id: 'tier2-quarter-layer',
+      type: 'fill',
+      source: 'tier2-data',
+      filter: ['==', ['get', 'buffer'], '1/4 mile'],
+      paint: {
+        'fill-color': '#e74c3c',
+        'fill-opacity': 0.5
+      }
+    });
+
+    // --- Tier 1: full half-mile (red) — paints over any orange overlap ---
+    map.addSource('tier1-data', {
+      type: 'geojson',
+      data: 'sb79_tod_buffers_tier1_all_clip.geojson?' + Date.now()
+    });
+
+    map.addLayer({
+      id: 'tier1-half-layer',
+      type: 'fill',
+      source: 'tier1-data',
+      filter: ['==', ['get', 'buffer'], '1/2 mile'],
+      paint: {
+        'fill-color': '#e74c3c',
+        'fill-opacity': 0.5
+      }
+    });
 
   }); // ← end of map.on('load')
 </script>
