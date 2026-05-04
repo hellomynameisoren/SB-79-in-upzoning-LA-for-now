@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Map</title>
+  <title>LA upzoning in response to SB 79</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
@@ -9,10 +9,85 @@
   <style>
     body { margin: 0; padding: 0; }
     #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #legend {
+      position: absolute;
+      bottom: 30px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 14px 16px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      min-width: 240px;
+      max-width: 300px;
+      font-family: sans-serif;
+    }
+    #legend h3 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #111;
+    }
+    #legend p {
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.5;
+    }
+    #legend a {
+      color: #2980b9;
+    }
+    #legend .entries {
+      border-top: 0.5px solid #ddd;
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #legend .entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #111;
+    }
+    .swatch-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: rgba(52, 152, 219, 0.25);
+      border: 1.5px solid #3498db;
+    }
+    .swatch-rect {
+      width: 24px;
+      height: 16px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
 <div id="map"></div>
+
+<div id="legend">
+  <h3>LA upzoning in response to SB 79</h3>
+  <p>These are the areas the City of LA is preemptively upzoning to 3–4 stories in order to delay SB 79 from fully taking effect in the city. <a href="https://planning.lacity.gov/odocument/ee79ed17-b69f-4cb5-8a97-4513d561f2ea/SB_79_Ordinances_Fact_Sheet.pdf" target="_blank">More information here.</a></p>
+  <div class="entries">
+    <div class="entry">
+      <div class="swatch-circle"></div>
+      <span>Station areas</span>
+    </div>
+    <div class="entry">
+      <div class="swatch-rect" style="background: rgba(231,76,60,0.5); border: 1.5px solid #c0392b;"></div>
+      <span>Up to 16 units allowed</span>
+    </div>
+    <div class="entry">
+      <div class="swatch-rect" style="background: rgba(230,126,34,0.5); border: 1.5px solid #d35400;"></div>
+      <span>Up to 10 units allowed</span>
+    </div>
+  </div>
+</div>
+
 <script>
   mapboxgl.accessToken = 'pk.eyJ1IjoiaGVsbG9teW5hbWVpc29yZW4iLCJhIjoiY21vcmZtMXhjMDRhODJycTh1cHR4ZG0zNyJ9.AnxYx7cBdg5plIxx--yW6w';
 
@@ -23,18 +98,16 @@
     zoom: 9
   });
 
-  // Fill color by zone
   const zoneColor = [
     'match', ['get', 'zone_color'],
     'orange', '#e67e22',
-    '#e74c3c' // default red
+    '#e74c3c'
   ];
 
-  // Outline color by zone
   const zoneOutlineColor = [
     'match', ['get', 'zone_color'],
     'orange', '#d35400',
-    '#c0392b' // default dark red
+    '#c0392b'
   ];
 
   map.on('load', () => {
