@@ -112,10 +112,10 @@
 
   map.on('load', () => {
 
-    // --- Layer 1: Option 1 with updated K Line ---
+    // --- Layer 1: Station areas ---
     map.addSource('option1-kline-data', {
       type: 'geojson',
-      data: 'Option 1 with updated K Line.geojson'
+      data: 'sb79_tod_buffers_combined.geojson'
     });
 
     map.addLayer({
