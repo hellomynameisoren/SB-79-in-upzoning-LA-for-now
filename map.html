@@ -113,22 +113,22 @@
   map.on('load', () => {
 
     // --- Layer 1: Station areas ---
-    map.addSource('option1-kline-data', {
+    map.addSource('station-area-data', {
       type: 'geojson',
       data: 'sb79_tod_buffers_combined.geojson'
     });
 
     map.addLayer({
-      id: 'option1-kline-layer',
+      id: 'station-area-layer',
       type: 'fill',
-      source: 'option1-kline-data',
+      source: 'station-area-data',
       paint: {
         'fill-color': '#3498db',
         'fill-opacity': 0.25
       }
     });
 
-    map.on('click', 'option1-kline-layer', (e) => {
+    map.on('click', 'station-area-layer', (e) => {
       const props = e.features[0].properties;
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
@@ -136,8 +136,8 @@
         .addTo(map);
     });
 
-    map.on('mouseenter', 'option1-kline-layer', () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', 'option1-kline-layer', () => map.getCanvas().style.cursor = '');
+    map.on('mouseenter', 'station-area-layer', () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', 'station-area-layer', () => map.getCanvas().style.cursor = '');
 
     // --- Layer 2: Ineligible in Option 1 no HPOZ or fire two tier ---
     map.addSource('ineligible-option1-data', {
